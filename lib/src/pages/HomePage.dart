@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:qrscanner/src/bloc/ScansBloc.dart';
 import 'package:qrscanner/src/models/Scan.dart';
 import 'package:qrscanner/src/pages/DireccionesPage.dart';
 import 'package:qrscanner/src/pages/MapasPage.dart';
 import 'package:barcode_scan/barcode_scan.dart';
-import 'package:qrscanner/src/providers/DBProvider.dart';
 
 class HomePage extends StatefulWidget {
 
@@ -13,6 +13,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
 
+  final scansBloc = new ScansBloc();
   int currentIndex = 0;
 
   @override
@@ -24,7 +25,10 @@ class _HomePageState extends State<HomePage> {
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.delete_forever),
-            onPressed: (){},
+            onPressed: (){
+              //Borra todos los elementos y actualiza el stream
+              scansBloc.borrarScanTodos();
+            },
           )
         ],
       ),
@@ -60,7 +64,9 @@ class _HomePageState extends State<HomePage> {
    {
      //Inserta a la db
      ScanModel scan = ScanModel(valor: futureString);
-     await DBProvider.db.nuevoScan(scan);
+
+     //Agrega el elemento y lo manda al flujo del stream
+     scansBloc.agregarScan(scan);
 
    } 
   }
