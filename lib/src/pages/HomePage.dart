@@ -43,13 +43,13 @@ class _HomePageState extends State<HomePage> {
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.filter_center_focus),
         //Ejecuta la accion de la función
-        onPressed: scanQR,
+        onPressed: () => scanQR(context),
         backgroundColor: Theme.of(context).primaryColor,
       ),
     );
   }
 
-  scanQR() async
+  scanQR(BuildContext context) async
   {
     //https://google.com
     //geo:40.7242,-74.0073
@@ -79,8 +79,8 @@ class _HomePageState extends State<HomePage> {
      //scansBloc.agregarScan(scan2);
 
      //En iOS espera un poco de tiempo para evitar un error con la lectura de la camara
-     if(Platform.isIOS)
-      Future.delayed(Duration(milliseconds: 750), () => utils.abrirScan(scan));
+    if(Platform.isIOS)
+      Future.delayed(Duration(milliseconds: 750), () => utils.abrirScan(context, scan));
 
      //utils.abrirScan(scan);
 

@@ -37,7 +37,7 @@ class MapasPage extends StatelessWidget {
               trailing: Icon(Icons.keyboard_arrow_right, color: Colors.grey,),
               //Al presionar sobre el elemento lo abre con la informacion que contiene
               onTap: (){
-                abrirScan(scans[index]);
+                abrirScan(context, scans[index]);
               },
             ),
           ),
