@@ -31,6 +31,9 @@ dependencies:
   # Para saber donde se encuentra un archivo
   path_provider: ^1.6.0
 
+  # Para usar el lanzador de enlaces web
+  url_launcher: ^5.4.2
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

@@ -1,9 +1,13 @@
+
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:qrscanner/src/bloc/ScansBloc.dart';
 import 'package:qrscanner/src/models/Scan.dart';
 import 'package:qrscanner/src/pages/DireccionesPage.dart';
 import 'package:qrscanner/src/pages/MapasPage.dart';
 import 'package:barcode_scan/barcode_scan.dart';
+import 'package:qrscanner/src/utils/Utils.dart' as utils;
 
 class HomePage extends StatefulWidget {
 
@@ -67,6 +71,18 @@ class _HomePageState extends State<HomePage> {
 
      //Agrega el elemento y lo manda al flujo del stream
      scansBloc.agregarScan(scan);
+
+     //Inserta a la db
+     //ScanModel scan2 = ScanModel(valor: "geo:40.7242,-74.0073");
+
+     //Agrega el elemento y lo manda al flujo del stream
+     //scansBloc.agregarScan(scan2);
+
+     //En iOS espera un poco de tiempo para evitar un error con la lectura de la camara
+     if(Platform.isIOS)
+      Future.delayed(Duration(milliseconds: 750), () => utils.abrirScan(scan));
+
+     //utils.abrirScan(scan);
 
    } 
   }
