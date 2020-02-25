@@ -10,6 +10,10 @@ class MapasPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    //Obtiene el stream de los scans
+    scansBloc.obtenerScans();
+
     return StreamBuilder<List<ScanModel>>(
       stream: scansBloc.scansStream,
       builder: (BuildContext context, AsyncSnapshot<List<ScanModel>> snapshot){
@@ -31,7 +35,7 @@ class MapasPage extends StatelessWidget {
             //Evento cuando se deslice (Borra el elemento de la db y actualiza el stream)
             onDismissed: (DismissDirection direction) => scansBloc.borrarScan(scans[index].id),
             child: ListTile(
-              leading: Icon(Icons.cloud_queue, color: Theme.of(context).primaryColor,),
+              leading: Icon(Icons.map, color: Theme.of(context).primaryColor,),
               title: Text(scans[index].valor),
               subtitle: Text("ID: ${scans[index].id}"),
               trailing: Icon(Icons.keyboard_arrow_right, color: Colors.grey,),

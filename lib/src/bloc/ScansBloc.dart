@@ -1,10 +1,11 @@
 import 'dart:async';
 
+import 'package:qrscanner/src/bloc/Validator.dart';
 import 'package:qrscanner/src/models/Scan.dart';
 import 'package:qrscanner/src/providers/DBProvider.dart';
 
 //Clase Singleton
-class ScansBloc
+class ScansBloc with Validators
 {
   static final ScansBloc _singleton = new ScansBloc._internal();
 
@@ -23,7 +24,8 @@ class ScansBloc
   final _scansStreamController = StreamController<List<ScanModel>>.broadcast();
 
   //Especifica lo que escucha el stream
-  Stream<List<ScanModel>> get scansStream => _scansStreamController.stream;
+  Stream<List<ScanModel>> get scansStream => _scansStreamController.stream.transform(validarGeo);
+  Stream<List<ScanModel>> get scansStreamHttp => _scansStreamController.stream.transform(validarHttp);
 
   dispose(){
     _scansStreamController?.close();

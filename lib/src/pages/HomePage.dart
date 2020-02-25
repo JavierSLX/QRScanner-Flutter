@@ -52,16 +52,17 @@ class _HomePageState extends State<HomePage> {
   scanQR(BuildContext context) async
   {
     //https://google.com
-    //geo:40.7242,-74.0073
+    //geo:19.40039564654536,-99.13342861394167
     
-    String futureString = "https://google.com";
-    /*try
+    String futureString;
+    
+    try
     {
       futureString = await BarcodeScanner.scan();
     }catch(error)
     {
       futureString = error.toString();
-    }*/
+    }
 
 
     if(futureString != null)

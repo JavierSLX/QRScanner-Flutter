@@ -1,9 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:qrscanner/src/models/Scan.dart';
-import 'package:latlong/latlong.dart';
 
-class MapaPage extends StatelessWidget {
+class MapaPage extends StatefulWidget {
+
+  @override
+  _MapaPageState createState() => _MapaPageState();
+}
+
+class _MapaPageState extends State<MapaPage> {
+
+  final map = new MapController();
+  String tipoMapa = "streets";
 
   @override
   Widget build(BuildContext context) {
@@ -17,31 +25,35 @@ class MapaPage extends StatelessWidget {
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.my_location),
-            onPressed: (){},
+            //Mueve el mapa de nuevo a donde se encontraba
+            onPressed: (){
+              map.move(scan.getLatLng(), 15);
+            },
           )
         ],
       ),
-      body: crearFlutterMap(scan)
+      body: crearFlutterMap(scan),
+      floatingActionButton: crearBotonFlotante(context),
     );
   }
 
-  //Crea el widget del mapa
   Widget crearFlutterMap(ScanModel scan)
   {
     return FlutterMap(
+      mapController: map,
       options: MapOptions(
         //El punto central del mapa
         center: scan.getLatLng(),
-        zoom: 10
+        zoom: 15
       ),
-      //Las capas de informacion
+      //Las capas de informacion (en forma de pila)
       layers: [
         crearMapa(),
+        crearMarcadores(scan),
       ],
     );
   }
 
-  //Informacion para crear el mapa
   TileLayerOptions crearMapa()
   {
     return TileLayerOptions(
@@ -49,8 +61,50 @@ class MapaPage extends StatelessWidget {
       "{id}/{z}/{x}/{y}@2x.png?access_token={accessToken}",
       additionalOptions: {
         'accessToken': "pk.eyJ1IjoiamF2aWVyc2x4IiwiYSI6ImNrNnZvZzZ3cjAzem8zZ3FraGE4NzNsNXYifQ.FjGagkqw-aYRdSSQ4zGSdQ",
-        "id": "mapbox.streets"
+        "id": "mapbox.$tipoMapa" //streets, dark, light, outdoors, satellite 
       }
+    );
+  }
+
+  crearMarcadores(ScanModel scan)
+  {
+    return MarkerLayerOptions(
+      markers: <Marker>[
+        Marker(
+          width: 100,
+          height: 100,
+          point: scan.getLatLng(),
+          //Se dibuja el marcador
+          builder: (BuildContext context){
+            return Container(
+              child: Icon(Icons.location_on, size: 45, color: Theme.of(context).primaryColor,),
+            );
+          }
+        )
+      ]
+    );
+  }
+
+  crearBotonFlotante(BuildContext context)
+  {
+    return FloatingActionButton(
+      child: Icon(Icons.repeat),
+      backgroundColor: Theme.of(context).primaryColor,
+      onPressed: (){
+        //streets, dark, light, outdoors, satellite
+        if(tipoMapa == "streets")
+          tipoMapa = "dark";
+        else if(tipoMapa == "dark")
+          tipoMapa = "light";
+        else if (tipoMapa == "light")
+          tipoMapa = "outdoors";
+        else if(tipoMapa == "outdoors")
+          tipoMapa = "satellite";
+        else
+          tipoMapa = "streets";
+
+        setState((){});
+      },
     );
   }
 }
